@@ -1,9 +1,49 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
-export default function Item({ image, name, old_price, priceAfter }) {
+export default function Item({ id, image, name, old_price, priceAfter }) {
+    const handleAddToCart = () => {
 
-    // const discountAmount = (price * discount) / 100;
-    // const priceAfter = +(price - discountAmount).toFixed(2);
+        let cart = JSON.parse(sessionStorage.getItem("cart")) || [];
+
+
+        const existingItem = cart.find(item => item.id === id);
+
+        if (existingItem) {
+
+            existingItem.qty += 1;
+        } else {
+
+            cart.push({
+                id,
+                name,
+                image,
+                old_price,
+                priceAfter,
+                qty: 1
+            });
+        }
+
+
+        sessionStorage.setItem("cart", JSON.stringify(cart));
+        window.dispatchEvent(new Event("cartUpdated"));
+        alert(`${name} added to cart!`);
+    };
+
+    const [cartCount, setCartCount] = useState(0);
+
+    useEffect(() => {
+        const updateCartCount = () => {
+            const savedCart = JSON.parse(sessionStorage.getItem("cart")) || [];
+            setCartCount(savedCart.length);
+        };
+
+        updateCartCount();
+
+
+        window.addEventListener("cartUpdated", updateCartCount);
+
+        return () => window.removeEventListener("cartUpdated", updateCartCount);
+    }, []);
 
     return (
         <div className="card" style={{ width: "18rem" }}>
@@ -21,6 +61,14 @@ export default function Item({ image, name, old_price, priceAfter }) {
                     <span className="fw-bold fs-5 me-2 text-success">${priceAfter}</span>
                     <span className="text-muted text-decoration-line-through">${old_price}</span>
                 </div>
+
+
+                <button
+                    className="btn btn-warning mt-3"
+                    onClick={handleAddToCart}
+                ><i className="fa-solid fa-cart-shopping me-2 text-white"></i>
+                    Add to Cart
+                </button>
             </div>
         </div>
     );

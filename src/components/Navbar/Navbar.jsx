@@ -1,13 +1,26 @@
 import './Navbar.css'
 import logo from '../Assets/logo.png'
 import cart_icon from '../Assets/cart_icon.png'
-import { useState } from 'react'
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 
 export default function Navbar() {
-    const [menu, setMenu] = useState("shop");
+    const location = useLocation();
     const [showMenu, setShowMenu] = useState(false);
+    const currentPath = location.pathname.split("/").pop() || "shop";
+    const [cartCount, setCartCount] = useState(0);
+    useEffect(() => {
+        const updateCartCount = () => {
+            const savedCart = JSON.parse(sessionStorage.getItem("cart")) || [];
+            setCartCount(savedCart.length);
+        };
 
+        updateCartCount();
+
+        window.addEventListener("cartUpdated", updateCartCount);
+
+        return () => window.removeEventListener("cartUpdated", updateCartCount);
+    }, []);
     return (
         <nav>
             <div className='nav-logo'>
@@ -17,18 +30,30 @@ export default function Navbar() {
 
             <div className={`menuAndcard ${showMenu ? 'show' : ''}`}>
                 <ul className="nav-menu" id="nav-links">
-                    <li onClick={() => setMenu("shop")}><Link to='/'>Shop</Link>{menu === 'shop' && <hr />}</li>
-                    <li onClick={() => setMenu("men")}><Link to='/mens'>Men</Link>{menu === 'men' && <hr />}</li>
-                    <li onClick={() => setMenu("women")}><Link to='/womens'>Women</Link>{menu === 'women' && <hr />}</li>
-                    <li onClick={() => setMenu("kids")}><Link to='/kids'>Kids</Link>{menu === 'kids' && <hr />}</li>
+                    <li>
+                        <Link to='/'>Shop</Link>
+                        {currentPath === '' || currentPath === 'shop' ? <hr /> : null}
+                    </li>
+                    <li>
+                        <Link to='/mens'>Men</Link>
+                        {currentPath === 'mens' ? <hr /> : null}
+                    </li>
+                    <li>
+                        <Link to='/womens'>Women</Link>
+                        {currentPath === 'womens' ? <hr /> : null}
+                    </li>
+                    <li>
+                        <Link to='/kids'>Kids</Link>
+                        {currentPath === 'kids' ? <hr /> : null}
+                    </li>
                 </ul>
 
                 <div className="nav-login-cart">
                     <button>Login</button>
                     <Link to='/cart'>
-                        <img src={cart_icon} alt="" onClick={() => setMenu("cart")} />
+                        <img src={cart_icon} alt="" />
                     </Link>
-                    <div className="nav-card-count">0</div>
+                    <div className="nav-card-count">{cartCount}</div>
                 </div>
             </div>
 
