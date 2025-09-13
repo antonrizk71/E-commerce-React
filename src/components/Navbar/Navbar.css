@@ -1,11 +1,13 @@
 nav {
     display: flex;
     justify-content: space-around;
+    align-items: center;
     box-shadow: 0 1px 3px -2px black;
     position: fixed;
     width: 100%;
     top: 0;
     background: white;
+    z-index: 1000;
 
 }
 
@@ -18,6 +20,7 @@ nav {
 .nav-logo p {
     color: #171717;
     font-size: 1.3rem;
+    margin-top: 1rem;
     font-weight: 600;
 }
 
@@ -43,8 +46,7 @@ nav {
     width: 80%;
     height: 3px;
     border-radius: 10px;
-    /* background: #ff4141; */
-    background: red;
+    background: #ff4141;
 }
 
 .nav-login-cart {
@@ -88,4 +90,64 @@ nav {
 
 nav ul :Link {
     text-decoration: none;
+}
+
+#menu-toggle {
+    display: none;
+    background-color: transparent;
+    border: none;
+    color: black;
+    font-size: 2rem;
+}
+
+.menuAndcard {
+    display: flex;
+    justify-content: space-between;
+    gap: 10rem;
+}
+
+/* phone*/
+@media (max-width: 767px) {
+
+
+
+    nav {
+        justify-content: space-between;
+        padding: 0 2rem;
+    }
+
+    .menuAndcard {
+        display: none;
+        /* flex-direction: column; */
+        flex-wrap: wrap;
+        position: absolute;
+        top: 4rem;
+        right: 0;
+        background-color: white;
+        box-shadow: 0 1px 3px -2px black;
+        width: 100%;
+        padding: .5rem 2rem;
+    }
+
+    #menu-toggle {
+        display: block;
+
+    }
+
+    .menuAndcard.show {
+        display: flex;
+        justify-content: center;
+        gap: 0rem;
+    }
+
+
+
+
+}
+
+/* tablet */
+@media (min-width: 768px) and (max-width: 1024px) {
+    body {
+        background-color: lightgreen;
+    }
 }
