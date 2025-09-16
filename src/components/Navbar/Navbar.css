@@ -1,3 +1,4 @@
+
 nav {
     display: flex;
     justify-content: space-around;
@@ -36,18 +37,42 @@ nav {
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    /* gap: 3px; */
     cursor: pointer;
+    position: relative; /* needed for pseudo element */
 }
 
 .nav-menu hr {
-    border: none;
-    width: 80%;
-    height: 3px;
-    border-radius: 10px;
-    background: #ff4141;
+    display: none; /* hide the old static hr */
 }
 
+/* Animated underline */
+.nav-menu li::after {
+    content: '';
+    position: absolute;
+    bottom: -10px; /* increased gap (from -6px to -10px) */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0%;
+    height: 3px;
+    border-radius: 10px;
+    background: #EB423F;
+    transition: width 0.3s ease-in-out;
+}
+
+/* Hover animation */
+.nav-menu li:hover::after {
+    width: 80%;
+}
+
+/* Active state (current page stays highlighted) */
+.nav-menu li.active::after {
+    width: 80%;
+}
+
+/* Focus state (keyboard navigation keeps underline) */
+.nav-menu li:focus-within::after {
+    width: 80%;
+}
 .nav-login-cart {
     display: flex;
     align-items: center;
@@ -87,7 +112,7 @@ nav {
 
 }
 
-nav ul :Link {
+nav ul :Link,button :Link {
     text-decoration: none;
 }
 

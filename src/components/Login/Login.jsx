@@ -3,18 +3,18 @@ import { Link } from 'react-router-dom';
 import './Login.css';
 
 export default function Login() {
-  const handleFocus = (e) => {
+  const Focus = (e) => {
     e.target.dataset.placeholder = e.target.placeholder;
     e.target.placeholder = '';
   };
 
-  const handleBlur = (e) => {
+  const Blur = (e) => {
     if (e.target.value === '') {
       e.target.placeholder = e.target.dataset.placeholder;
     }
   };
 
-  const handleSubmit = (e) => {
+  const Submit = (e) => {
     e.preventDefault();
     console.log("Form submitted");
   };
@@ -22,14 +22,14 @@ export default function Login() {
   return (
     <div className="form">
       <h2>Login</h2>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={Submit}>
         <input 
           type="text" 
           id="name" 
           name="name" 
           placeholder="Enter your name" 
-          onFocus={handleFocus}
-          onBlur={handleBlur}
+          onFocus={Focus}
+          onBlur={Blur}
           required 
         />
         <input 
@@ -37,11 +37,11 @@ export default function Login() {
           id="password" 
           name="password" 
           placeholder="Enter password" 
-          onFocus={handleFocus}
-          onBlur={handleBlur}
+          onFocus={Focus}
+          onBlur={Blur}
           required 
         />
-        <input type="submit" value="Login" />
+        <input type="submit" value="Login"  />
         <p>
           Don’t have an account? <Link to="/signup">Create one</Link>
         </p>
