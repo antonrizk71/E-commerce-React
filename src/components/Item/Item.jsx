@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-
+import Swal from 'sweetalert2';
 export default function Item({ id, image, name, old_price, priceAfter }) {
     const handleAddToCart = () => {
 
@@ -26,7 +26,13 @@ export default function Item({ id, image, name, old_price, priceAfter }) {
 
         sessionStorage.setItem("cart", JSON.stringify(cart));
         window.dispatchEvent(new Event("cartUpdated"));
-        alert(`${name} added to cart!`);
+        Swal.fire({
+  position: "center",
+  icon: "success",
+  title: `${name} added to cart successfully`,
+  showConfirmButton: false,
+  timer: 1500
+});
     };
 
     const [cartCount, setCartCount] = useState(0);

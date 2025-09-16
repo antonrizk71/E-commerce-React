@@ -21,6 +21,8 @@ export default function Navbar() {
 
         return () => window.removeEventListener("cartUpdated", updateCartCount);
     }, []);
+
+    
     return (
         <nav>
             <div className='nav-logo'>
@@ -49,7 +51,9 @@ export default function Navbar() {
                 </ul>
 
                 <div className="nav-login-cart">
-                    <button>Login</button>
+                    <button><Link to='/login'>
+                    Login
+                    </Link></button>
                     <Link to='/cart'>
                         <img src={cart_icon} alt="" />
                     </Link>
