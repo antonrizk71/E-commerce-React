@@ -12,8 +12,7 @@ export default function Cart() {
   const updateCart = (newCart) => {
     setCart(newCart);
     sessionStorage.setItem("cart", JSON.stringify(newCart));
-    const event = new Event("cartUpdated");
-    window.dispatchEvent(event);
+    window.dispatchEvent(new Event("cartUpdated"));
   };
 
   const removeItem = (id) => {
@@ -32,9 +31,9 @@ export default function Cart() {
         Swal.fire({
           title: "Deleted!",
           text: "Your item has been deleted.",
+          icon: "success",
           showConfirmButton: false,
           timer: 1500,
-          icon: "success",
         });
       }
     });
@@ -43,21 +42,21 @@ export default function Cart() {
   const clearCart = () => {
     Swal.fire({
       title: "Are you sure?",
-      text: "You won't be able to revert this!",
+      text: "This will clear your cart!",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
+      confirmButtonText: "Yes, clear it!",
     }).then((result) => {
       if (result.isConfirmed) {
         updateCart([]);
         Swal.fire({
-          title: "Deleted!",
-          text: "Your cart has been deleted.",
+          title: "Cleared!",
+          text: "Your cart is now empty.",
+          icon: "success",
           showConfirmButton: false,
           timer: 1500,
-          icon: "success",
         });
       }
     });
@@ -83,15 +82,9 @@ export default function Cart() {
   );
 
   const Checkout = () => {
-    if (cart.length === 0) {
-      Swal.fire("Oops!", "Your cart is empty!", "info");
-      return;
-    }
-
-    // Build receipt HTML — includes images (or placeholder) and price formatting
     const receiptHtml = `
-      <div style="text-align:left; max-height:400px; overflow:auto;">
-        <ul style="list-style:none; padding:0; margin:0;">
+      <div class="text-start" style="max-height:400px; overflow:auto;">
+        <ul class="list-unstyled">
           ${cart
             .map((item) => {
               const imgSrc =
@@ -101,21 +94,21 @@ export default function Cart() {
               const priceEach = Number(item.priceAfter) || 0;
               const lineTotal = (priceEach * Number(item.qty || 0)).toFixed(2);
               return `
-                <li style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
-                  <img src="${imgSrc}" alt="${item.name}" style="width:40px; height:40px; object-fit:cover; border-radius:6px;" />
+                <li class="d-flex align-items-center mb-2">
+                  <img src="${imgSrc}" alt="${item.name}" class="rounded me-2" style="width:40px; height:40px; object-fit:cover;" />
                   <div>
-                    <div style="font-weight:600;">${item.name}</div>
-                    <div style="font-size:12px; color:#555;">
+                    <div class="fw-bold">${item.name}</div>
+                    <small class="text-muted">
                       Qty: ${item.qty} × $${priceEach.toFixed(2)} = $${lineTotal}
-                    </div>
+                    </small>
                   </div>
                 </li>
               `;
             })
             .join("")}
         </ul>
-        <hr style="margin:10px 0;" />
-        <h5 style="margin:0;">Total: $${totalPrice.toFixed(2)}</h5>
+        <hr />
+        <h5>Total: $${totalPrice.toFixed(2)}</h5>
       </div>
     `;
 
@@ -152,69 +145,77 @@ export default function Cart() {
 
   return (
     <div className="container mt-5">
-      <h2>Your Cart</h2>
+      <h2 className="mb-4">Your Cart</h2>
 
       {cart.length === 0 ? (
-        <p>No items in cart</p>
+        <div className="alert alert-info text-center fw-bold">Your cart is empty</div>
       ) : (
         <>
-          {cart.map((item) => (
-            <div
-              key={item.id}
-              className="d-flex justify-content-between align-items-center border-bottom py-2"
-            >
-              <div className="d-flex align-items-center">
-                <img
-                  src={item.image || "https://via.placeholder.com/50"}
-                  alt={item.name}
-                  style={{ width: "50px", marginRight: "10px", objectFit: "cover", borderRadius: 6 }}
-                />
-                <div>
-                  <h6 className="mb-0">{item.name}</h6>
-                  <small>
-                    Price: ${Number(item.priceAfter).toFixed(2)} × {item.qty} ={" "}
-                    <strong>${(Number(item.priceAfter) * Number(item.qty)).toFixed(2)}</strong>
-                  </small>
-                </div>
-              </div>
-
-              {/* Increment / Decrement Buttons */}
-              <div className="d-flex align-items-center">
-                <button
-                  className="btn btn-outline-secondary btn-sm me-2"
-                  onClick={() => decrementQty(item.id)}
-                  disabled={item.qty <= 1}
-                >
-                  -
-                </button>
-                <span style={{ minWidth: 24, textAlign: "center" }}>{item.qty}</span>
-                <button
-                  className="btn btn-outline-secondary btn-sm ms-2"
-                  onClick={() => incrementQty(item.id)}
-                >
-                  +
-                </button>
-              </div>
-
-              {/* Delete Button */}
-              <button
-                className="btn btn-danger btn-sm ms-3"
-                onClick={() => removeItem(item.id)}
+          <div className="list-group mb-3">
+            {cart.map((item) => (
+              <div
+                key={item.id}
+                className="list-group-item d-flex justify-content-between align-items-center"
               >
-                <i className="fa-solid fa-trash"></i>
-              </button>
-            </div>
-          ))}
+                <div className="d-flex align-items-center">
+                  <img
+                    src={item.image || "https://via.placeholder.com/50"}
+                    alt={item.name}
+                    className="rounded me-3"
+                    style={{ width: "50px", height: "50px", objectFit: "cover" }}
+                  />
+                  <div>
+                    <h6 className="mb-1">{item.name}</h6>
+                    <small className="text-muted">
+                      ${Number(item.priceAfter).toFixed(2)} × {item.qty} ={" "}
+                      <strong>
+                        ${(Number(item.priceAfter) * Number(item.qty)).toFixed(2)}
+                      </strong>
+                    </small>
+                  </div>
+                </div>
 
-          <div className="d-flex justify-content-between align-items-center mt-3">
-            <h5>Total: ${totalPrice.toFixed(2)}</h5>
-            <div>
-              <button className="btn btn-warning me-2" onClick={clearCart}>
-                <i className="fa-solid fa-trash-can me-2"></i>Clear Cart
-              </button>
-              <button className="btn btn-success" onClick={Checkout}>
-                <i className="fa-solid fa-credit-card me-2"></i>Proceed to Checkout
-              </button>
+                {/* Increment / Decrement  */}
+                <div className="d-flex align-items-center">
+                  <button
+                    className="btn btn-outline-secondary btn-sm me-2"
+                    onClick={() => decrementQty(item.id)}
+                    disabled={item.qty <= 1}
+                  >
+                    -
+                  </button>
+                  <span className="px-2">{item.qty}</span>
+                  <button
+                    className="btn btn-outline-secondary btn-sm ms-2"
+                    onClick={() => incrementQty(item.id)}
+                  >
+                    +
+                  </button>
+                </div>
+
+                {/* Delete Button */}
+                <button
+                  className="btn btn-danger btn-sm ms-3"
+                  onClick={() => removeItem(item.id)}
+                >
+                  <i className="fa-solid fa-trash"></i>
+                </button>
+              </div>
+            ))}
+          </div>
+
+          {/* Footer */}
+          <div className="card p-3 shadow-sm">
+            <div className="d-flex justify-content-between align-items-center">
+              <h5>Total: ${totalPrice.toFixed(2)}</h5>
+              <div>
+                <button className="btn btn-outline-danger me-2" onClick={clearCart}>
+                  <i className="fa-solid fa-trash-can me-1"></i>Clear Cart
+                </button>
+                <button className="btn btn-success" onClick={Checkout}>
+                  <i className="fa-solid fa-credit-card me-1"></i>Checkout
+                </button>
+              </div>
             </div>
           </div>
         </>

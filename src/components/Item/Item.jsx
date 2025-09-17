@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Swal from 'sweetalert2';
 export default function Item({ id, image, name, old_price, priceAfter }) {
-    const handleAddToCart = () => {
+    const AddToCart = () => {
 
         let cart = JSON.parse(sessionStorage.getItem("cart")) || [];
 
@@ -22,7 +22,7 @@ export default function Item({ id, image, name, old_price, priceAfter }) {
                 qty: 1
             });
         }
-
+                                                
 
         sessionStorage.setItem("cart", JSON.stringify(cart));
         window.dispatchEvent(new Event("cartUpdated"));
@@ -71,7 +71,7 @@ export default function Item({ id, image, name, old_price, priceAfter }) {
 
                 <button
                     className="btn btn-warning mt-3"
-                    onClick={handleAddToCart}
+                    onClick={AddToCart}
                 ><i className="fa-solid fa-cart-shopping me-2 text-white"></i>
                     Add to Cart
                 </button>
