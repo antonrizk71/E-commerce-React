@@ -8,8 +8,8 @@ export default function Shop() {
         <>
             <Hero />
             {/* { image, name, price, priceAfter} */}
-            <div className="main">
-                <h1 className='text-center m-3'>POPULAR IN WOMEN</h1>
+            <div className="main" >
+                <h1 className='text-center m-3' >POPULAR IN WOMEN</h1>
                 <div className='main-card'>
                     {data_product.map((item, i) => {
                         return (
@@ -21,7 +21,7 @@ export default function Shop() {
             </div>
 
 
-            <div className="main">
+            <div className="main " id='main'>
                 <h1 className='text-center m-3'>NEW COLLECTIONS</h1>
                 <div className='main-card'>
                     {new_collections.map((item, i) => {

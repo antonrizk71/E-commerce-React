@@ -85,8 +85,7 @@ export default function Cart() {
     const receiptHtml = `
       <div class="text-start" style="max-height:400px; overflow:auto;">
         <ul class="list-unstyled">
-          ${cart
-            .map((item) => {
+          ${cart.map((item) => {
               const imgSrc =
                 typeof item.image === "string" && item.image
                   ? item.image
@@ -113,7 +112,7 @@ export default function Cart() {
     `;
 
     Swal.fire({
-      title: "🧾 Receipt",
+      title: "Receipt",
       html: receiptHtml,
       icon: "info",
       showCancelButton: true,

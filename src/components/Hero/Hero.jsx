@@ -15,7 +15,7 @@ export default function Hero() {
                 <p>collections</p>
                 <p>for everyone</p>
                 <div className="hero-latest-btn">
-                    <div>Latest Collection </div>
+                    <div ><a className='text-white text-decoration-none' href="#main">Latest Collection</a> </div>
                     <img src={arrow_icon} alt="" />
                 </div>
             </div>
